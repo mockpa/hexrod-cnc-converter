@@ -1,0 +1,58 @@
+# hexrod.hal
+# HAL configuration for Mesa 7C81 (hm2_rpspi)
+# Axes: X (joint 0), Z (joint 1), A optional (joint 2)
+
+# ─── LOAD DRIVERS ────────────────────────────────────────────────────────────
+loadrt [HOSTMOT2](DRIVER) board=[HOSTMOT2](BOARD) config=[HOSTMOT2](CONFIG)
+loadrt motmod base_period_nsec=0 servo_period_nsec=[EMCMOT](SERVO_PERIOD) num_joints=3
+
+# Set to num_joints=4 and uncomment A-axis section below when dividing head is fitted.
+
+# ─── SERVO THREAD ─────────────────────────────────────────────────────────────
+addf hm2_rpspi.0.read          servo-thread
+addf motion-command-handler    servo-thread
+addf motion-controller         servo-thread
+addf hm2_rpspi.0.write         servo-thread
+
+# ─── STEPGEN TIMING ──────────────────────────────────────────────────────────
+setp hm2_rpspi.0.stepgen.00.step_type 0
+setp hm2_rpspi.0.stepgen.01.step_type 0
+setp hm2_rpspi.0.stepgen.02.step_type 0   # spindle enable (not a motion axis)
+
+# ─── X AXIS (joint 0, stepgen 00) ────────────────────────────────────────────
+net x-pos-cmd  joint.0.motor-pos-cmd  => hm2_rpspi.0.stepgen.00.position-cmd
+net x-pos-fb   joint.0.motor-pos-fb   <= hm2_rpspi.0.stepgen.00.position-fb
+net x-enable   joint.0.amp-enable-out => hm2_rpspi.0.stepgen.00.enable
+
+setp hm2_rpspi.0.stepgen.00.maxvel      [JOINT_0]MAX_VELOCITY
+setp hm2_rpspi.0.stepgen.00.maxaccel    [JOINT_0]MAX_ACCELERATION
+setp hm2_rpspi.0.stepgen.00.position-scale [JOINT_0]SCALE
+
+# ─── Z AXIS (joint 1, stepgen 01) ────────────────────────────────────────────
+net z-pos-cmd  joint.1.motor-pos-cmd  => hm2_rpspi.0.stepgen.01.position-cmd
+net z-pos-fb   joint.1.motor-pos-fb   <= hm2_rpspi.0.stepgen.01.position-fb
+net z-enable   joint.1.amp-enable-out => hm2_rpspi.0.stepgen.01.enable
+
+setp hm2_rpspi.0.stepgen.01.maxvel      [JOINT_1]MAX_VELOCITY
+setp hm2_rpspi.0.stepgen.01.maxaccel    [JOINT_1]MAX_ACCELERATION
+setp hm2_rpspi.0.stepgen.01.position-scale [JOINT_1]SCALE
+
+# ─── A AXIS / DIVIDING HEAD (joint 2, stepgen 03) ────────────────────────────
+# Uncomment when dividing head stepper is connected.
+# Uses stepgen channel 03 to leave channel 02 for spindle enable/PWM.
+#
+#setp hm2_rpspi.0.stepgen.03.step_type 0
+#net a-pos-cmd  joint.2.motor-pos-cmd  => hm2_rpspi.0.stepgen.03.position-cmd
+#net a-pos-fb   joint.2.motor-pos-fb   <= hm2_rpspi.0.stepgen.03.position-fb
+#net a-enable   joint.2.amp-enable-out => hm2_rpspi.0.stepgen.03.enable
+#setp hm2_rpspi.0.stepgen.03.maxvel     [JOINT_2]MAX_VELOCITY
+#setp hm2_rpspi.0.stepgen.03.maxaccel   [JOINT_2]MAX_ACCELERATION
+#setp hm2_rpspi.0.stepgen.03.position-scale [JOINT_2]SCALE
+
+# ─── HOME SWITCHES ───────────────────────────────────────────────────────────
+# Adapt pin numbers to your wiring
+net x-home  joint.0.home-sw-in  <= hm2_rpspi.0.gpio.000.in_not
+net z-home  joint.1.home-sw-in  <= hm2_rpspi.0.gpio.001.in_not
+
+# ─── E-STOP ──────────────────────────────────────────────────────────────────
+net estop-loop iocontrol.0.user-enable-out => iocontrol.0.emc-enable-in

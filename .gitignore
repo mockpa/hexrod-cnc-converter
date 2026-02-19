@@ -1,0 +1,5 @@
+*.ngc
+*.pyc
+__pycache__/
+*.var
+*.bak
