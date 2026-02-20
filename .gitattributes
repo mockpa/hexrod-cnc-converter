@@ -1,0 +1,10 @@
+# Force LF line endings for all files
+# Required: Python scripts and G-Code run on Linux (Raspberry Pi / LinuxCNC)
+* text=auto eol=lf
+
+# Explicitly LF for these types
+*.py    text eol=lf
+*.ngc   text eol=lf
+*.hal   text eol=lf
+*.ini   text eol=lf
+*.md    text eol=lf
