@@ -1,0 +1,2 @@
+# postgui.hal - runs after GUI is loaded
+# Add any GUI pin connections here

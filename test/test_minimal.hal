@@ -1,0 +1,16 @@
+# minimal test - no hardware, software stepgens
+loadrt trivkins coordinates=XZ
+loadrt motmod servo_period_nsec=1000000 num_joints=2
+
+addf motion-command-handler servo-thread
+addf motion-controller       servo-thread
+
+# fake stepgens using siggen
+loadrt siggen
+addf siggen.0.update servo-thread
+
+net x-pos-cmd  joint.0.motor-pos-cmd  => joint.0.motor-pos-fb
+net z-pos-cmd  joint.1.motor-pos-cmd  => joint.1.motor-pos-fb
+
+setp iocontrol.0.emc-enable-in 1
+net estop-out iocontrol.0.user-enable-out

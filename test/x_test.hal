@@ -1,0 +1,23 @@
+# x_test.hal - X axis stepper test (interactive)
+# Run with: halrun -I x_test.hal
+# BOB P2=PUL-, P3=DIR- (DB25 pins 2/3, StepGen 00)
+
+loadrt hostmot2
+loadrt hm2_rpspi config="num_encoders=0 num_pwmgens=0 num_stepgens=1"
+loadrt threads name1=servo-thread period1=1000000
+
+addf hm2_7c81.0.read  servo-thread
+addf hm2_7c81.0.write servo-thread
+
+# X axis - stepgen channel 00
+setp hm2_7c81.0.stepgen.00.step_type      0       # step/dir
+setp hm2_7c81.0.stepgen.00.control-type   1       # velocity mode
+setp hm2_7c81.0.stepgen.00.position-scale 40.744  # steps/mm
+setp hm2_7c81.0.stepgen.00.maxvel         150     # mm/s
+setp hm2_7c81.0.stepgen.00.maxaccel       500     # mm/s^2
+setp hm2_7c81.0.stepgen.00.steplen        2500    # ns
+setp hm2_7c81.0.stepgen.00.stepspace      2500    # ns
+setp hm2_7c81.0.stepgen.00.dirhold        5000    # ns
+setp hm2_7c81.0.stepgen.00.dirsetup       5000    # ns
+
+start

@@ -58,4 +58,4 @@ sudo mesaflash --device 7C81 --spi --addr /dev/spidev0.0 \
   --verify 7c81/configs/hostmot2/7c81_5abobx2d.bit
 ```
 
-Hardware pin mapping details are in `../7c81_2x_mach3bob_plan.md`.
+Hardware pin mapping details are in `7c81_2x_mach3bob_plan.md`.

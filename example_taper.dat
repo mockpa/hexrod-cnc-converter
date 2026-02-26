@@ -1,0 +1,25 @@
+# Example taper data file
+# ========================
+# Two columns: station_inches  flat_to_flat_mm
+#
+# Stations every 5 inches from tip (0) to butt
+# flat_to_flat_mm = finished hex rod flat-to-flat dimension in mm
+#
+# To use thousandths of an inch per side instead:
+#   python3 taper_gcode.py myrod.dat --thou
+#   (then column 2 is in thou/side, e.g. 60 = 0.060" per side)
+
+# station_in  flat_to_flat_mm
+0             1.52
+5             1.78
+10            2.03
+15            2.29
+20            2.54
+25            2.79
+30            3.05
+35            3.30
+40            3.56
+45            3.81
+50            4.06
+55            4.32
+60            4.57

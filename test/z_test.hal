@@ -1,0 +1,25 @@
+# z_test.hal - Z axis stepper test (interactive)
+# Run with: sudo halrun -I z_test.hal
+# Then: setp hm2_7c81.0.stepgen.02.velocity-cmd 2.0
+#        setp hm2_7c81.0.stepgen.02.enable 1
+# Stop:  setp hm2_7c81.0.stepgen.02.enable 0
+
+loadrt hostmot2
+loadrt hm2_rpspi config="num_encoders=0 num_pwmgens=0 num_stepgens=3"
+loadrt threads name1=servo-thread period1=1000000
+
+addf hm2_7c81.0.read  servo-thread
+addf hm2_7c81.0.write servo-thread
+
+# Z axis - stepgen channel 01
+setp hm2_7c81.0.stepgen.02.step_type      0      # step/dir
+setp hm2_7c81.0.stepgen.02.control-type   1      # velocity mode
+setp hm2_7c81.0.stepgen.02.position-scale 800    # steps/mm
+setp hm2_7c81.0.stepgen.02.maxvel         20     # mm/s
+setp hm2_7c81.0.stepgen.02.maxaccel       150    # mm/s^2
+setp hm2_7c81.0.stepgen.02.steplen        2500   # ns
+setp hm2_7c81.0.stepgen.02.stepspace      2500   # ns
+setp hm2_7c81.0.stepgen.02.dirhold        5000   # ns
+setp hm2_7c81.0.stepgen.02.dirsetup       5000   # ns
+
+start

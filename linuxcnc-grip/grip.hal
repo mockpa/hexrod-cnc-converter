@@ -1,12 +1,12 @@
-# hexrod.hal
+# grip.hal
 # HAL configuration for Mesa 7C81 (hm2_rpspi)
-# LinuxCNC 2.9, trivkins, Axes: X (joint 0), Z (joint 1)
+# LinuxCNC 2.9, trivkins, Axes: X (joint 0), Z (joint 1), A (joint 2)
 
 # ─── LOAD DRIVERS ─────────────────────────────────────────────────────────────
 loadrt hostmot2
 loadrt [HOSTMOT2](DRIVER) config=[HOSTMOT2](CONFIG)
-loadrt trivkins coordinates=XZ
-loadrt motmod base_period_nsec=0 servo_period_nsec=[EMCMOT](SERVO_PERIOD) num_joints=2
+loadrt trivkins coordinates=XZA
+loadrt motmod base_period_nsec=0 servo_period_nsec=[EMCMOT](SERVO_PERIOD) num_joints=3
 
 # ─── SERVO THREAD ─────────────────────────────────────────────────────────────
 addf hm2_7c81.0.read          servo-thread
@@ -42,27 +42,28 @@ net z-pos-cmd  joint.1.motor-pos-cmd  => hm2_7c81.0.stepgen.02.position-cmd
 net z-pos-fb   joint.1.motor-pos-fb   <= hm2_7c81.0.stepgen.02.position-fb
 net z-enable   joint.1.amp-enable-out => hm2_7c81.0.stepgen.02.enable
 
-# ─── A AXIS / DIVIDING HEAD (joint 2, stepgen 03) ─────────────────────────────
-# Uncomment when dividing head stepper is connected.
-# Also set num_joints=3 in motmod above and add [JOINT_2] to INI.
-#setp hm2_7c81.0.stepgen.03.step_type      0
-#setp hm2_7c81.0.stepgen.03.position-scale [JOINT_2]SCALE
-#setp hm2_7c81.0.stepgen.03.maxvel         [JOINT_2]MAX_VELOCITY
-#setp hm2_7c81.0.stepgen.03.maxaccel       [JOINT_2]MAX_ACCELERATION
-#setp hm2_7c81.0.stepgen.03.steplen        [JOINT_2]STEPLEN
-#setp hm2_7c81.0.stepgen.03.stepspace      [JOINT_2]STEPSPACE
-#setp hm2_7c81.0.stepgen.03.dirhold        [JOINT_2]DIRHOLD
-#setp hm2_7c81.0.stepgen.03.dirsetup       [JOINT_2]DIRSETUP
-#net a-pos-cmd  joint.2.motor-pos-cmd  => hm2_7c81.0.stepgen.03.position-cmd
-#net a-pos-fb   joint.2.motor-pos-fb   <= hm2_7c81.0.stepgen.03.position-fb
-#net a-enable   joint.2.amp-enable-out => hm2_7c81.0.stepgen.03.enable
+# ─── A AXIS (joint 2, stepgen 03, BOB P1 DB25 pins 8/9) ──────────────────────
+# Direct-drive rotary: 3200 steps/rev ÷ 360° = 8.889 steps/deg
+setp hm2_7c81.0.stepgen.03.step_type      0
+setp hm2_7c81.0.stepgen.03.position-scale [JOINT_2]SCALE
+setp hm2_7c81.0.stepgen.03.maxvel         [JOINT_2]MAX_VELOCITY
+setp hm2_7c81.0.stepgen.03.maxaccel       [JOINT_2]MAX_ACCELERATION
+setp hm2_7c81.0.stepgen.03.steplen        [JOINT_2]STEPLEN
+setp hm2_7c81.0.stepgen.03.stepspace      [JOINT_2]STEPSPACE
+setp hm2_7c81.0.stepgen.03.dirhold        [JOINT_2]DIRHOLD
+setp hm2_7c81.0.stepgen.03.dirsetup       [JOINT_2]DIRSETUP
+
+net a-pos-cmd  joint.2.motor-pos-cmd  => hm2_7c81.0.stepgen.03.position-cmd
+net a-pos-fb   joint.2.motor-pos-fb   <= hm2_7c81.0.stepgen.03.position-fb
+net a-enable   joint.2.amp-enable-out => hm2_7c81.0.stepgen.03.enable
 
 # ─── HOME SWITCHES ────────────────────────────────────────────────────────────
-# Uncomment and set correct GPIO pin numbers when switches are wired
+# A-axis: no switch — HOME_SEQUENCE = -1, homed on startup at current position.
+# Uncomment and set correct GPIO numbers when X/Z switches are wired:
 #net x-home  joint.0.home-sw-in  <= hm2_7c81.0.gpio.000.in_not
 #net z-home  joint.1.home-sw-in  <= hm2_7c81.0.gpio.001.in_not
 
 # ─── E-STOP ───────────────────────────────────────────────────────────────────
-# No hardware e-stop wired - hold emc-enable-in high permanently
-# Replace with a real e-stop switch connection when hardware is added
+# No hardware e-stop wired – hold emc-enable-in high permanently.
+# Replace with a real e-stop switch when hardware is added.
 setp iocontrol.0.emc-enable-in 1
