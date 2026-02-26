@@ -77,8 +77,8 @@ setp hm2_7c81.0.gpio.015.is_output 0
 setp hm2_7c81.0.gpio.016.is_output 0
 net x-home      joint.0.home-sw-in                         <=  hm2_7c81.0.gpio.013.in
 net x-max       joint.0.pos-lim-sw-in                      <=  hm2_7c81.0.gpio.014.in
-net z-min-home  joint.1.home-sw-in  joint.1.neg-lim-sw-in  <=  hm2_7c81.0.gpio.016.in
-net z-max       joint.1.pos-lim-sw-in                      <=  hm2_7c81.0.gpio.015.in
+net z-min       joint.1.neg-lim-sw-in                      <=  hm2_7c81.0.gpio.016.in
+net z-max-home  joint.1.home-sw-in  joint.1.pos-lim-sw-in  <=  hm2_7c81.0.gpio.015.in
 # Probe not yet installed. Uncomment when touch plate is wired to DB25 pin 15 (IO3):
 #setp hm2_7c81.0.gpio.003.is_output 0
 #net probe-in    motion.probe-input                         <=  hm2_7c81.0.gpio.003.in
