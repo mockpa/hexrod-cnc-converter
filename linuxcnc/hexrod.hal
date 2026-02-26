@@ -69,7 +69,7 @@ setp hm2_7c81.0.gpio.013.is_output 0
 setp hm2_7c81.0.gpio.014.is_output 0
 setp hm2_7c81.0.gpio.015.is_output 0
 setp hm2_7c81.0.gpio.016.is_output 0
-net x-min-home  joint.0.home-sw-in  joint.0.neg-lim-sw-in  <=  hm2_7c81.0.gpio.013.in
+net x-home      joint.0.home-sw-in                         <=  hm2_7c81.0.gpio.013.in
 net x-max       joint.0.pos-lim-sw-in                      <=  hm2_7c81.0.gpio.014.in
 net z-min-home  joint.1.home-sw-in  joint.1.neg-lim-sw-in  <=  hm2_7c81.0.gpio.016.in
 net z-max       joint.1.pos-lim-sw-in                      <=  hm2_7c81.0.gpio.015.in
