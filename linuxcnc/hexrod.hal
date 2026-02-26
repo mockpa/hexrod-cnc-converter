@@ -57,10 +57,15 @@ net z-enable   joint.1.amp-enable-out => hm2_7c81.0.stepgen.02.enable
 #net a-pos-fb   joint.2.motor-pos-fb   <= hm2_7c81.0.stepgen.03.position-fb
 #net a-enable   joint.2.amp-enable-out => hm2_7c81.0.stepgen.03.enable
 
-# ─── HOME SWITCHES ────────────────────────────────────────────────────────────
-# Uncomment and set correct GPIO pin numbers when switches are wired
-#net x-home  joint.0.home-sw-in  <= hm2_7c81.0.gpio.000.in_not
-#net z-home  joint.1.home-sw-in  <= hm2_7c81.0.gpio.001.in_not
+# ─── HOME / LIMIT SWITCHES ────────────────────────────────────────────────────
+# BOB input terminals (DB25 pins 10/11) → 7C81 IO13/IO14
+# Wire each NC switch between the BOB terminal and COM/GND.
+# Each switch serves as both home and negative limit for its axis.
+# Uncomment when switches are physically connected.
+#setp hm2_7c81.0.gpio.013.is_output 0
+#setp hm2_7c81.0.gpio.014.is_output 0
+#net x-home-lim  joint.0.home-sw-in  joint.0.neg-lim-sw-in  <=  hm2_7c81.0.gpio.013.in_not
+#net z-home-lim  joint.1.home-sw-in  joint.1.neg-lim-sw-in  <=  hm2_7c81.0.gpio.014.in_not
 
 # ─── E-STOP ───────────────────────────────────────────────────────────────────
 # No hardware e-stop wired - hold emc-enable-in high permanently
