@@ -64,6 +64,12 @@ net z-enable   joint.1.amp-enable-out => hm2_7c81.0.stepgen.02.enable
 #   DB25 pin 11  IO14  gpio.014  X max limit   (positive end)
 #   DB25 pin 12  IO15  gpio.015  Z max limit   (positive end)
 #   DB25 pin 13  IO16  gpio.016  Z min / home  (negative end)
+#   DB25 pin 15  IO3   gpio.003  Tool Z probe  (touch plate / tool setter)
+#
+# gpio.014-016 are encoder IOs freed for GPIO use because num_encoders=0.
+#
+# Probe polarity: gpio.003.in = FALSE at rest, TRUE when tool contacts plate.
+# If inverted, swap .in for .in_not below and verify in HAL watch panel.
 #
 setp hm2_7c81.0.gpio.013.is_output 0
 setp hm2_7c81.0.gpio.014.is_output 0
@@ -73,6 +79,9 @@ net x-home      joint.0.home-sw-in                         <=  hm2_7c81.0.gpio.0
 net x-max       joint.0.pos-lim-sw-in                      <=  hm2_7c81.0.gpio.014.in
 net z-min-home  joint.1.home-sw-in  joint.1.neg-lim-sw-in  <=  hm2_7c81.0.gpio.016.in
 net z-max       joint.1.pos-lim-sw-in                      <=  hm2_7c81.0.gpio.015.in
+# Probe not yet installed. Uncomment when touch plate is wired to DB25 pin 15 (IO3):
+#setp hm2_7c81.0.gpio.003.is_output 0
+#net probe-in    motion.probe-input                         <=  hm2_7c81.0.gpio.003.in
 
 # ─── E-STOP ───────────────────────────────────────────────────────────────────
 # No hardware e-stop wired - hold emc-enable-in high permanently

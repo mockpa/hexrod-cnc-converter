@@ -1,0 +1,12 @@
+; Tool Z touch probe routine
+; Place the touch plate on the workpiece surface before running.
+; Adjust PLATE_HEIGHT to your plate thickness in mm.
+#<plate_height> = 10.0
+
+G90 G21 G49          ; absolute mode, metric, cancel tool length offsets
+G38.2 Z-50 F200      ; probe down 50mm max at 200 mm/min
+G4 P0.2              ; brief dwell
+(debug, Probed Z = #5063)
+G91 G0 Z5            ; retract 5mm
+G90
+G10 L2 P1 Z[#5063 + #<plate_height>]  ; set G54 Z zero to workpiece surface
