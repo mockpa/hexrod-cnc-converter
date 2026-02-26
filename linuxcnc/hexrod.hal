@@ -62,8 +62,8 @@ net z-enable   joint.1.amp-enable-out => hm2_7c81.0.stepgen.02.enable
 #
 #   DB25 pin 10  IO13  gpio.013  X min / home  (negative end)
 #   DB25 pin 11  IO14  gpio.014  X max limit   (positive end)
-#   DB25 pin 12  IO15  gpio.015  Z min / home  (negative end)
-#   DB25 pin 13  IO16  gpio.016  Z max limit   (positive end)
+#   DB25 pin 12  IO15  gpio.015  Z max limit   (positive end)
+#   DB25 pin 13  IO16  gpio.016  Z min / home  (negative end)
 #
 setp hm2_7c81.0.gpio.013.is_output 0
 setp hm2_7c81.0.gpio.014.is_output 0
@@ -71,8 +71,8 @@ setp hm2_7c81.0.gpio.015.is_output 0
 setp hm2_7c81.0.gpio.016.is_output 0
 net x-min-home  joint.0.home-sw-in  joint.0.neg-lim-sw-in  <=  hm2_7c81.0.gpio.013.in
 net x-max       joint.0.pos-lim-sw-in                      <=  hm2_7c81.0.gpio.014.in
-net z-min-home  joint.1.home-sw-in  joint.1.neg-lim-sw-in  <=  hm2_7c81.0.gpio.015.in
-net z-max       joint.1.pos-lim-sw-in                      <=  hm2_7c81.0.gpio.016.in
+net z-min-home  joint.1.home-sw-in  joint.1.neg-lim-sw-in  <=  hm2_7c81.0.gpio.016.in
+net z-max       joint.1.pos-lim-sw-in                      <=  hm2_7c81.0.gpio.015.in
 
 # ─── E-STOP ───────────────────────────────────────────────────────────────────
 # No hardware e-stop wired - hold emc-enable-in high permanently
