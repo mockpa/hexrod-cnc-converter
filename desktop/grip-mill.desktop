@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Grip Mill
+Comment=LinuxCNC – cork grip & reel seat mill (Mesa 7C81)
+Exec=linuxcnc /home/lurr/hexrod-cnc-converter/linuxcnc-grip/grip.ini
+Icon=/home/lurr/hexrod-cnc-converter/desktop/grip-mill.svg
+Terminal=false
+Categories=Science;Engineering;
+StartupNotify=false

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Hexrod CNC
+Comment=LinuxCNC – hexagonal rod taper mill (Mesa 7C81)
+Exec=linuxcnc /home/lurr/hexrod-cnc-converter/linuxcnc/hexrod.ini
+Icon=/home/lurr/hexrod-cnc-converter/desktop/hexrod-cnc.svg
+Terminal=false
+Categories=Science;Engineering;
+StartupNotify=false
