@@ -75,13 +75,20 @@ setp hm2_7c81.0.gpio.013.is_output 0
 setp hm2_7c81.0.gpio.014.is_output 0
 setp hm2_7c81.0.gpio.015.is_output 0
 setp hm2_7c81.0.gpio.016.is_output 0
-net x-home      joint.0.home-sw-in                         <=  hm2_7c81.0.gpio.013.in
-net x-max       joint.0.pos-lim-sw-in                      <=  hm2_7c81.0.gpio.014.in
-net z-min       joint.1.neg-lim-sw-in                      <=  hm2_7c81.0.gpio.016.in
-net z-max-home  joint.1.home-sw-in  joint.1.pos-lim-sw-in  <=  hm2_7c81.0.gpio.015.in
+net x-home      joint.0.home-sw-in  joint.0.neg-lim-sw-in  <=  hm2_7c81.0.gpio.013.in
+#net x-max       joint.0.pos-lim-sw-in                      <=  hm2_7c81.0.gpio.014.in
+net z-home      joint.1.home-sw-in                         <=  hm2_7c81.0.gpio.016.in
+net z-upper     joint.1.pos-lim-sw-in                      <=  hm2_7c81.0.gpio.015.in
 # Probe not yet installed. Uncomment when touch plate is wired to DB25 pin 15 (IO3):
 #setp hm2_7c81.0.gpio.003.is_output 0
 #net probe-in    motion.probe-input                         <=  hm2_7c81.0.gpio.003.in
+
+# ─── SPINDLE (YL42 VFD via RS-485 Modbus on /dev/ttyACM0) ────────────────────
+loadusr -Wn yl42_vfd python3 /home/lurr/hexrod-cnc-converter/linuxcnc/yl42_vfd.py
+net spindle-speed-cmd  spindle.0.speed-out  => yl42_vfd.speed-rpm
+net spindle-fwd        spindle.0.forward    => yl42_vfd.run-fwd
+net spindle-rev        spindle.0.reverse    => yl42_vfd.run-rev
+net spindle-at-speed   yl42_vfd.at-speed    => spindle.0.at-speed
 
 # ─── E-STOP ───────────────────────────────────────────────────────────────────
 # No hardware e-stop wired - hold emc-enable-in high permanently
